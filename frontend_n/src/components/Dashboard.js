@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { useParams } from "react-router-dom";
 import axios from "axios";
+
+
 export default function AllEmployees(){
 
     const params = useParams();
@@ -18,19 +20,6 @@ export default function AllEmployees(){
 
         getEmployees();
     }, [])
-
-
-    
-    function onDelete(id) {
-          axios.delete(`http://localhost:8070/employee/delete/${id}`)
-            .then((res) => {
-              alert("Deleted Successfully!");
-              this.getEmployees();
-            })
-            .catch((error) => {
-              console.error("Error deleting employee:", error);
-            });
-    }
     
 
     return(
@@ -48,7 +37,6 @@ export default function AllEmployees(){
                     <th scope="col">Gender</th>
                     <th scope="col">Leave Limit</th>
                     <th scope="col">Password</th>
-                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,14 +52,6 @@ export default function AllEmployees(){
                      <td>{employee.leaveLimit}</td>
                      <td>{employee.password}</td>
 
-                     <td>
-                        <a className='btn btn-warning' href={`get/${employee._id}`}>
-                            <i className='fas fa-edit'></i>&nbsp;Edit
-                        </a>&nbsp;
-                        <a className='btn btn-danger'  onClick={() => onDelete(`${employee._id}`)}>
-                            <i className='fas fa-trash-alt'></i>&nbsp;Delete
-                        </a>
-                     </td>
                 </tr>
                  ))}
                 

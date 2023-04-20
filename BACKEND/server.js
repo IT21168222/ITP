@@ -47,3 +47,12 @@ app.listen(PORT, () => {
 //employee.js
 const employeeRouter = require("./routes/employees.js");
 app.use("/employee", employeeRouter);
+
+const payrollRouter = require("./routes/payrolls.js");
+app.use("/payroll", payrollRouter);
+
+const attendanceRouter = require("./routes/attendances.js");
+app.use("/attendance", attendanceRouter);
+
+const leaveRouter = require("./routes/leaves.js");
+app.use("/leave", leaveRouter);

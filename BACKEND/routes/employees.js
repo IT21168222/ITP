@@ -1,13 +1,27 @@
 const router = require("express").Router();
-let Employee = require("../models/Employee");
+let Employee = require("../models/employee");
 
 router.route("/add").post((req, res) => {
     const name = req.body.name;
     const address = req.body.address;
+    const mobileNo = req.body.mobileNo;
+    const dob = req.body.dob;
+    const email = req.body.email;
+    const gender = req.body.gender;
+    const leaveLimit = Number(req.body.leaveLimit);
+    const password = req.body.password;
 
     const newEmployee = new Employee({
         name,
-        address
+        address,
+        mobileNo,
+        dob,
+        email,
+        gender,
+        leaveLimit,
+        password
+
+
     })
 
     newEmployee.save().then(() => {
@@ -31,11 +45,16 @@ router.route("/").get((req, res) => {
 // update part
 router.route("/update/:id").put(async(req, res) => {
     let userId = req.params.id;
-    const {name, address} = req.body; // names in front end
-
+    const {name, address,  mobileNo,  dob,  email,  gender,  leaveLimit,  password} = req.body; // names in front end
     const updateEmployee = {
         name,
-        address
+        address,
+        mobileNo,
+        dob,
+        email,
+        gender,
+        leaveLimit,
+        password
     }
 
     const update = await Employee.findByIdAndUpdate(userId, updateEmployee).then(() => {

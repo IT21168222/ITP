@@ -3,6 +3,7 @@ import React from "react";
 
 function Header(){
     return(
+        <div className="dashboard-app">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <a className="navbar-brand" href="#">Navbar</a>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,12 +16,13 @@ function Header(){
                 </li>
                 <li className="nav-item">
                     
-                    <a className="nav-link" href="/add">Add employee</a>
+                    <a className="nav-link" href="employee/add">Add employee</a>
 
                 </li>
                 </ul>
             </div>
         </nav>
+        </div>
     )
 }
 
