@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 
@@ -12,6 +13,7 @@ export default function EditLeave(){
     const [date, setDate] = useState("");
     const [type, setType] = useState("");
     const [remarks, setRemarks] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() =>{
         function getLeave(){
@@ -40,9 +42,19 @@ export default function EditLeave(){
             type,
             remarks
         }
-        axios.put(`http://localhost:8070/leave/update/${params.id}`, newLeave).then(() => {
-            alert("Leave Updated!");
-        }).catch((error)=>{
+        axios.put(`http://localhost:8070/leave/update/${params.id}`, newLeave)
+        Swal.fire({
+            icon: "success",
+            title: "Leave Updated!",
+            confirmButtonText: "OK",
+            onConfirm: () => {
+
+            },
+        })
+        // .then(() => {
+        //     alert("Leave Updated!");
+        // })
+        .catch((error)=>{
             alert(error)
         })
 
@@ -51,7 +63,7 @@ export default function EditLeave(){
 
 
     return(
-        <div className="container">
+        <div className="dashboard-app container">
         <form onSubmit={updateData}>
             <div className="form-group">
                 <label for="name">Name</label>

@@ -1,61 +1,106 @@
-import React, {useState} from "react"
+import React, { useState, useEffect } from 'react';
 import axios from "axios";
+import Swal from "sweetalert2";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
-export default function AddLeave(){
+export default function AddLeave() {
 
-
-    const [name, setName] = useState("");
+    const params = useParams();
+    const [employeeId, setId] = useState("");
     const [date, setDate] = useState("");
     const [type, setType] = useState("");
     const [remarks, setRemarks] = useState("");
+    const [status, setStatus] = useState("Under Review");
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+        if(params.id){
+            function getLeave() {
+                axios.get(`http://localhost:8070/leave/add/get/${params.id}`).then((res) => {
+                    // setName(res.data.employee.name);
+                    setId(res.data.employee._id);
+                }).catch((error) => {
+                    alert(error.message);
     
-    function sendData(e){
+                })
+            }
+    
+            getLeave();
+
+        }
+        
+    }, [])
+
+    function sendData(e) {
         e.preventDefault();//prevent normal behaviour
         const newLeave = {
-            name,
+            employeeId,
             date,
             type,
-            remarks    
+            remarks,
+            status
         }
-        //alert("Hi" + name)
-        axios.post("http://localhost:8070/leave/add", newLeave).then(() => {
-            alert("Leave Added!");
-        }).catch((error)=>{
+        //alert("Hi" + employeeId)
+        axios.post("http://localhost:8070/leave/add", newLeave)
+        Swal.fire({
+            icon: "success",
+            title: "leave Added!",
+            confirmButtonText: "OK",
+            onConfirm: () => {
+
+            },
+        }).then(() => navigate("/leave/"))
+        // .then(() => {
+        //     alert("Leave Added!");
+        // })
+        .catch((error) => {
             alert(error)
         })
 
     }
 
-    return(
-        <div className="container">
-        <form onSubmit={sendData}>
-            <div className="form-group">
-                <label for="name">Name</label>
-                <input className="form-control" id="name" placeholder="Type here..." onChange={(e) => {
-                    setName(e.target.value);
-                }} />
-            </div>
-            <div className="form-group">
-                <label for="date">Date</label>
-                <input type="text" className="form-control" id="date" placeholder="Type here..." onChange={(e) => {
-                    setDate(e.target.value);
-                }} />
-            </div>    
-            <div className="form-group">
-                <label for="type">Type</label>
-                <input type="text" className="form-control" id="type" placeholder="Type here..." onChange={(e) => {
-                    setType(e.target.value);
-                }} />
-            </div>
-            <div className="form-group">
-                <label for="remarks">Remarks</label>
-                <input type="text" className="form-control" id="remarks" placeholder="Type here..." onChange={(e) => {
-                    setRemarks(e.target.value);
-                }} />
-            </div>
+    return (
+        <div className="dashboard-app container">
+            <h1>Add Leave</h1>
+            <form onSubmit={sendData}>
+                <div className="form-group">
+                    <label for="employeeId">ID</label>
+                    <input className="form-control" id="employeeId" placeholder="Type here..." value={employeeId} onChange={(e) => {
+                        setId(e.target.value);
+                    }} />
+                </div>
+                <div className="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" className="form-control" id="date" placeholder="Type here..." onChange={(e) => {
+                        setDate(e.target.value);
+                    }} />
+                </div>
+                {/* <div className="form-group">
+                    <label for="type">Type</label>
+                    <input type="text" className="form-control" id="type" placeholder="Type here..." onChange={(e) => {
+                        setType(e.target.value);
+                    }} />
+                </div> */}
+                <div className="form-group">
+                    <label for="type">Type</label>&nbsp;
+                    <select id="type" name="type" onChange={(e) => {
+                        setType(e.target.value);
+                    }} >
+                        <option value="Not Selected" >Choose one...</option>
+                        <option value="Medical" >Medical</option>
+                        <option value="Casual">Casual</option>
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label for="remarks">Remarks</label>
+                    <input type="text" className="form-control" id="remarks" placeholder="Type here..." onChange={(e) => {
+                        setRemarks(e.target.value);
+                    }} />
+                </div>
 
-            <button type="submit" className="btn btn-primary">Submit</button>
-        </form>
+                <button type="submit" className="btn btn-primary">Submit</button>
+            </form>
         </div>
     )
 }

@@ -7,6 +7,9 @@ export default function AllLeaves(){
     const params = useParams();
     const id = params.id;
     const[leaves, setLeaves] = useState([]);
+    const [searchInput, setSearchInput] = useState("");
+    // const [Id, setId] = useState(params.id);
+
     useEffect(() =>{
         function getLeaves(){
             axios.get("http://localhost:8070/leave/").then((res) => {
@@ -33,33 +36,48 @@ export default function AllLeaves(){
             });
     }
 
+
+    function searchTable(leaves) {
+        return leaves.filter((leave) => {
+            return (
+                leave.employeeId.toLowerCase().includes(id)
+
+
+            );
+        });
+    }
+
+
+
+
     return(
-        <div className="container">
-        <h1>Leave List</h1>
-        <table class="table">
+        <div className="dashboard-app container">
+        <h1>My Leave Requests</h1>
+        <table className="table">
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Name</th>
+                    <th scope="col">ID</th>
                     <th scope="col">Date</th>
                     <th scope="col">Type</th>
                     <th scope="col">Remarks</th>
+                    <th scope="col">Status</th>
                 </tr>
             </thead>
             <tbody>
-                {leaves.map((leave, index) => (
+                {searchTable(leaves).map((leave, index) => (
                 <tr>        
                      <th scope="row">{index+1}</th>
-                     <td>{leave.name}</td>
+                     <td>{leave.employeeId}</td>
                      <td>{leave.date}</td>
                      <td>{leave.type}</td>
                      <td>{leave.remarks}</td>
+                     {/* <td>{leave.status}</td> */}
+                     <td className={`${leave.status === 'Rejected' ? 'text-danger' : leave.status === 'Approved' ? 'text-success' : ''}`}><b>{leave.status}</b></td>
                      <td>
-                        <a className='btn btn-warning' href={`get/${leave._id}`}>
-                            <i className='fas fa-edit'></i>&nbsp;Edit
-                        </a>&nbsp;
+
                         <a className='btn btn-danger'  onClick={() => onDelete(`${leave._id}`)}>
-                            <i className='fas fa-trash-alt'></i>&nbsp;Delete
+                        <i className="fas fa-xmark" style={{color: "#ffffff",}} />&nbsp;Cancel
                         </a>
                      </td>
                 </tr>

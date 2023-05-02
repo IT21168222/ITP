@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const attendanceSchema = new Schema({
+    employeeId: {
+        type: String,
+        required: true
+    },
     name : {
         type : String,
         required : true
@@ -11,13 +15,17 @@ const attendanceSchema = new Schema({
         type : String,
         required : true
     },
+    date : {
+        type : String,
+        required : false
+    },
     time_in : {
         type : String,
-        required : true
+        required : false
     },
     time_out : {
         type : String,
-        required : true
+        required : false
     }
 })
 

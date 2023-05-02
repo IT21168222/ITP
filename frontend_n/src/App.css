@@ -1,4 +1,4 @@
-.App {
+/* .App {
   
 }
 
@@ -49,4 +49,32 @@
 }
 :-ms-input-placeholder {  
   font-style: italic; 
+} */
+
+
+
+
+/* fieldset {
+  background-color: #eeeeee;
+}
+
+legend {
+  background-color: gray;
+  color: white;
+  padding: 5px 10px;
+}
+
+input {
+  margin: 5px;
+} */
+
+
+li{
+  text-decoration: none;
+}
+a:link { text-decoration: none; }
+
+
+.form-control{
+  width:fit-content
 }

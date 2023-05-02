@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 
@@ -11,12 +12,14 @@ export default function EditEmployee(){
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
     const [mobileNo, setMobileNo] = useState("");
+    const [nic, setNIC] = useState("");
     const [dob, setDOB] = useState("");
     const [email, setEmail] = useState("");
     const [gender, setGender] = useState("");
     const [leaveLimit, setLeaveLimit] = useState("");
     const [password, setPassword] = useState("");
     const [confirm_password, setConfirmPassword] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() =>{
         function getEmployee(){
@@ -24,6 +27,7 @@ export default function EditEmployee(){
                 setName(res.data.employee.name);
                 setAddress(res.data.employee.address);
                 setMobileNo(res.data.employee.mobileNo);
+                setNIC(res.data.employee.nic);
                 setDOB(res.data.employee.dob);
                 setEmail(res.data.employee.email);
                 setGender(res.data.employee.gender);
@@ -57,16 +61,26 @@ export default function EditEmployee(){
             name,
             address,
             mobileNo,
+            nic,
             dob,
             email,
             gender,
             leaveLimit,
             password
         }
-        axios.put(`http://localhost:8070/employee/update/${params.id}`, newEmployee).then(() => {
-            alert("Employee Updated!");
-            setName("");
-        }).catch((error)=>{
+        axios.put(`http://localhost:8070/employee/update/${params.id}`, newEmployee)
+        Swal.fire({
+            icon: "success",
+            title: "Employee Updated!",
+            confirmButtonText: "OK",
+            onConfirm: () => {
+
+            },
+        }).then(() => navigate("/"))
+        // .then(() => {
+        //     alert("Employee Updated!");
+        // })
+        .catch((error)=>{
             alert(error)
         })
 
@@ -75,7 +89,7 @@ export default function EditEmployee(){
 
 
     return(
-        <div className="container">
+        <div className="dashboard-app container">
         <form onSubmit={updateData}>
             <div className="form-group">
                 <label for="name">Name</label>
@@ -91,10 +105,16 @@ export default function EditEmployee(){
             </div>
             <div className="form-group">
                 <label for="mobileNo">Mobile No</label>
-                <input type="text" className="form-control" id="mobileNo" placeholder="Enter mobile No" value={mobileNo} onChange={(e) => {
+                <input type="tel" className="form-control" id="mobileNo" placeholder="Enter mobile No" pattern="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]" value={mobileNo} onChange={(e) => {
                     setMobileNo(e.target.value);
                 }} />
             </div>
+            <div className="form-group">
+                        <label for="nic">NIC</label>
+                        <input type="numeric" className="form-control" id="nic" placeholder="Enter NIC" pattern="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]" value={nic} onChange={(e) => {
+                            setNIC(e.target.value);
+                        }} />
+                    </div>
             <div className="form-group">
                 <label for="dob">Date of birth</label>
                 <input type="text" className="form-control" id="dob" placeholder="Enter date of birth" value={dob} onChange={(e) => {
@@ -122,14 +142,8 @@ export default function EditEmployee(){
             </div>
             <div className="form-group">
                 <label for="password">Password</label>
-                <input type="password" className="form-control" id="password" placeholder="Enter Password" value={password} onChange={(e) => {
+                <input type="text" className="form-control" id="password" placeholder="Enter Password" value={password} onChange={(e) => {
                     setPassword(e.target.value);
-                }} />
-            </div>
-            <div className="form-group">
-                <label for="confirm_password">Confirm Password</label>
-                <input type="password" className="form-control" id="confirm_password" placeholder="Enter Password" onChange={(e) => {
-                    setConfirmPassword(e.target.value);
                 }} />
             </div>
            

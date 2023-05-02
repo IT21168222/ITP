@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const leaveSchema = new Schema({
-    name : {
+    employeeId : {
         type : String,
         required : true
     },
@@ -16,6 +16,10 @@ const leaveSchema = new Schema({
         required : true
     },
     remarks : {
+        type : String,
+        required : true
+    },
+    status : {
         type : String,
         required : true
     }

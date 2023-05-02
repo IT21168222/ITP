@@ -5,6 +5,7 @@ router.route("/add").post((req, res) => {
     const name = req.body.name;
     const address = req.body.address;
     const mobileNo = req.body.mobileNo;
+    const nic = req.body.nic;
     const dob = req.body.dob;
     const email = req.body.email;
     const gender = req.body.gender;
@@ -15,6 +16,7 @@ router.route("/add").post((req, res) => {
         name,
         address,
         mobileNo,
+        nic,
         dob,
         email,
         gender,
@@ -45,11 +47,12 @@ router.route("/").get((req, res) => {
 // update part
 router.route("/update/:id").put(async(req, res) => {
     let userId = req.params.id;
-    const {name, address,  mobileNo,  dob,  email,  gender,  leaveLimit,  password} = req.body; // names in front end
+    const {name, address,  mobileNo, nic,  dob,  email,  gender,  leaveLimit,  password} = req.body; // names in front end
     const updateEmployee = {
         name,
         address,
         mobileNo,
+        nic,
         dob,
         email,
         gender,

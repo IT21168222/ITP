@@ -118,6 +118,9 @@ h1, .h1 {
     -ms-flex-positive: 2;
     flex-grow: 2;
     margin-top: 84px;
+    margin-left: 200px;
+    padding-left: 50px;
+    padding-top: 5px;
 }
 
 .dashboard-content {

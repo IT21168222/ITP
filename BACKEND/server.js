@@ -56,3 +56,9 @@ app.use("/attendance", attendanceRouter);
 
 const leaveRouter = require("./routes/leaves.js");
 app.use("/leave", leaveRouter);
+
+const viewRouter = require("./routes/views.js");
+app.use("/view", viewRouter);
+
+// const testRouter = require("./routes/tests.js");
+// app.use("/test", testRouter);

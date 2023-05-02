@@ -2,16 +2,12 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const employeeSchema = new Schema({
+const viewSchema = new Schema({
     name : {
         type : String,
         required : true
     },
     address : {
-        type : String,
-        required : true
-    },
-    nic : {
         type : String,
         required : true
     },
@@ -41,6 +37,6 @@ const employeeSchema = new Schema({
     }
 })
 
-const Employee = mongoose.model("Employee", employeeSchema);
+const View = mongoose.model("View", viewSchema);
 
-module.exports = Employee;
+module.exports = View;

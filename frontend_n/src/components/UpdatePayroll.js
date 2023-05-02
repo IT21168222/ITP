@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 
@@ -14,6 +15,7 @@ export default function EditPayroll(){
     const [medical_leave, setMedical_leave] = useState("");
     const [bonus, setBonus] = useState("");
     const [tax, setTax] = useState("");
+    const navigate = useNavigate();
     
 
     useEffect(() =>{
@@ -47,9 +49,19 @@ export default function EditPayroll(){
             bonus,
             tax
         }
-        axios.put(`http://localhost:8070/payroll/update/${params.id}`, newPayroll).then(() => {
-            alert("Payroll Updated!");
-        }).catch((error)=>{
+        axios.put(`http://localhost:8070/payroll/update/${params.id}`, newPayroll)
+        Swal.fire({
+            icon: "success",
+            title: "Payroll Updated!",
+            confirmButtonText: "OK",
+            onConfirm: () => {
+
+            },
+        })
+        // .then(() => {
+        //     alert("Payroll Updated!");
+        // })
+        .catch((error)=>{
             alert(error)
         })
 
@@ -58,7 +70,7 @@ export default function EditPayroll(){
 
 
     return(
-        <div className="container">
+        <div className="dashboard-app container">
         <form onSubmit={updateData}>
             <div className="form-group">
                 <label for="name">Name</label>

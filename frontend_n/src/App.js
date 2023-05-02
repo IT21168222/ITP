@@ -1,4 +1,11 @@
 
+import './components/css/header.css';
+import './components/css/sidebar.css';
+import './App.css';
+
+import Header from './components/headerEmployee';
+import Sidebar from './components/sidebar';
+
 import AddEmployee from './components/AddEmployee';
 import AllEmployees from './components/AllEmployees';
 import Test from './components/test';
@@ -13,13 +20,16 @@ import Leave_stat from './components/leave_stat';
 import AddLeave from './components/AddLeave';
 import UpdateLeave from './components/UpdateLeave';
 
-import NavBarMain1 from './components/NavBarMain1';
-import NavBarMain2 from './components/NavBarMain2';
-
+import ViewEmployee from './components/Dashboard';
+import ViewEmployeeLink from './components/employee_page';
 
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
+import AddAttendance from './components/AddAttendance';
+import AllAttendances from './components/AllAttendance';
+import UpdateAttendance from './components/UpdateAttendance';
+import My from './components/My';
+import AllLeaves from './components/AllLeave';
 
 export default class App extends Component {
 
@@ -38,26 +48,53 @@ export default class App extends Component {
     return (
 
       <BrowserRouter>
-        
-        <NavBarMain1/>
-        <NavBarMain2 />
+
+        <Header />
+        <Sidebar />
 
         <div className="">
           <Routes>
+
+            <Route path='employee/add' exact Component={AddEmployee}></Route>
+            <Route path='employee/get/:id' exact Component={UpdateEmployee}></Route>
             <Route path='/' exact Component={AllEmployees}></Route>
-            <Route path='/' exact Component={AddEmployee}></Route>
-            
 
-            <Route path="leave/add"  exact Component={AddLeave} />
-            <Route path="leave/get/:id" exact Component={UpdateLeave} />
-            <Route path="leave/" exact Component={Leave_stat} />
+            <Route path="leave/add" exact Component={AddLeave} ></Route>
+            <Route path="leave/get/:id" exact Component={UpdateLeave} ></Route>
+            <Route path="leave/" exact Component={AllLeaves} ></Route>
 
-            <Route path="payroll/add"  exact Component={AddPayroll} />
-            <Route path="payroll/get/:id" exact Component={UpdatePayroll} />
-            <Route path="payroll/" exact Component={AllPayrolls} />
+            <Route path="payroll/add" exact Component={AddPayroll}></Route>
+            <Route path="payroll/get/:id" exact Component={UpdatePayroll} ></Route>
+            <Route path="payroll/" exact Component={AllPayrolls} ></Route>
+
+            <Route path="attendance/add" exact Component={AddAttendance} ></Route>
+            <Route path="attendance/" exact Component={AllAttendances} ></Route>
+            <Route path="attendance/get/:id" exact Component={UpdateAttendance} ></Route>
+            <Route path="attendance/add/get/:id" exact Component={AddAttendance} ></Route>
+            <Route path="leave/add/get/:id" exact Component={AddLeave} ></Route>
+            <Route path="payroll/add/get/:id" exact Component={AddPayroll} ></Route>
+
+            {/* <Route path="employee/view" exact Component={ViewEmployeeLink} ></Route> */}
+            <Route path="employee/view/" exact Component={ViewEmployeeLink} ></Route>
+
+            {/* <My/> */}
+            <Route path="qr/" exact Component={My} ></Route>
+            <Route path="testM/" exact Component={Test} ></Route>
+            {/* <Route path="test/" exact Component={Test_Page} ></Route> */}
+
+            <Route path='employee/view/:id' element={
+              <div>
+                <ViewEmployee />
+                <Leave_stat />
+                <AddLeave/>
+              </div>
+            } ></Route>
+
           </Routes>
         </div>
       </BrowserRouter>
+
+
     )
   }
 }
