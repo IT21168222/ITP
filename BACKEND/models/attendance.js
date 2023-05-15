@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const attendanceSchema = new Schema({
     employeeId: {
         type: String,
-        required: true,
+        required: false,
         unique : true,
     },
     name : {

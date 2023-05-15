@@ -9,6 +9,7 @@ export default function AllAttendances() {
     const params = useParams();
     const id = params.id;
     const [attendances, setAttendances] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const navigate = useNavigate();
 
@@ -22,10 +23,44 @@ export default function AllAttendances() {
             })
         }
 
-        getAttendances();
+       getAttendances();
+
     }, [])
+    // 
 
 
+    function initialAttendance() {
+        // if (true) {//attendances === []
+            // Fetch the employees from your backend API
+            axios.get("http://localhost:8070/employee/").then((res) => {
+                setEmployees(res.data);
+                // Initialize the attendance as absent for each employee
+                const initialAttendanceList = employees.map((employee) => ({
+                    employeeId: employee._id,
+                    status: "Absent",
+                }));
+
+                // Save the initial attendance to the database using your backend API
+                axios
+                    .post("http://localhost:8070/attendance/add", initialAttendanceList)
+                    .then((response) => {
+                        alert("Initialized Successfully");
+                        axios.get("http://localhost:8070/attendance/").then((res) => {
+                            setAttendances(res.data);
+                            refreshPage();
+                        }).catch((error) => {
+                            alert(error.message);
+            
+                        }) // Move this inside the `then` block
+                        
+                    });
+            });
+
+        // } else {
+        //     //
+
+        // }
+    }
 
     function onDelete(id) {
         Swal.fire({
@@ -173,6 +208,7 @@ export default function AllAttendances() {
             <a className='btn btn-warning' href={`/attendance/add`}>
                 <i className=''></i>&nbsp;Add New Attendance Manually
             </a>
+            <button onClick={initialAttendance}>Initialize</button>
         </div>
 
     )

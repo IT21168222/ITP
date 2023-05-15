@@ -33,32 +33,60 @@ const cron = require('node-cron');
 
 // cron.schedule('0 0 * * *', executeOncePerDay);
 
-router.route("/add").post((req, res) => {
-    const name = req.body.name;
-    const employeeId = req.body.employeeId;
-    const status = req.body.status;
-    const date = req.body.date;
-    const time_in = req.body.time_in;
-    const time_out = req.body.time_out;
 
-    const newAttendance = new Attendance({
+router.route("/add").post((req, res) => {
+    const attendanceData = req.body;
+  
+    const newAttendance = attendanceData.map((data) => {
+      const { name, employeeId, status, date, time_in, time_out } = data;
+  
+      return new Attendance({
         name,
         employeeId,
         status,
         date,
         time_in,
-        time_out
-
-    })
-
-    newAttendance.save().then(() => {
-        res.json("Attendance Added!")
-    }).catch((err) => {
+        time_out,
+      });
+    });
+  
+    Attendance.insertMany(newAttendance)
+      .then(() => {
+        res.json("Attendance Added!");
+      })
+      .catch((err) => {
         console.log(err);
-    })
+        res.status(500).json("Error occurred while adding attendance");
+      });
+  });
+  
+
+// router.route("/add").post((req, res) => {
+//     const name = req.body.name;
+//     const employeeId = req.body.employeeId;
+//     const status = req.body.status;
+//     const date = req.body.date;
+//     const time_in = req.body.time_in;
+//     const time_out = req.body.time_out;
+
+//     const newAttendance = new Attendance({
+//         name,
+//         employeeId,
+//         status,
+//         date,
+//         time_in,
+//         time_out
+
+//     })
+
+//     newAttendance.save().then(() => {
+//         res.json("Attendance Added!")
+//     }).catch((err) => {
+//         console.log(err);
+//     })
 
 
-})
+// })
 
 router.route("/").get((req, res) => {
     Attendance.find().then((attendances) => {

@@ -17,6 +17,7 @@ export default function AddAttendance() {
     const [employeeId, setId] = useState("");
 
     useEffect(() => {
+        
         if (params.id) {
             function getAttendance() {
                 axios.get(`http://localhost:8070/attendance/add/get/${params.id}`).then((res) => {
