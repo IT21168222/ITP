@@ -7,7 +7,7 @@ import axios from "axios";
 export default function EditEmployee() {
 
 
-    
+
 
     const params = useParams();
     const [name, setName] = useState("");
@@ -90,6 +90,8 @@ export default function EditEmployee() {
 
     return (
         <div className="dashboard-app container">
+            <br /><br />
+            <h1>Employee Profile</h1>
             <form>
                 <div className="form-group">
                     <label for="Id">Employee ID</label>
@@ -147,11 +149,11 @@ export default function EditEmployee() {
 
                 {/*<button type="Submit" className="btn btn-primary">Update</button>*/}
             </form>
-            <br/>
-            <br/>
-            <br/>
+            <br />
+            <br />
+            <br />
 
-        
+
 
             <h1>Attendance Records</h1>
             <table className="table">

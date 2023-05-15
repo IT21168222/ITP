@@ -30,23 +30,39 @@ export default function AllEmployees() {
 
 
     function onDelete(id) {
-        axios.delete(`http://localhost:8070/employee/delete/${id}`)
         Swal.fire({
-            icon: "info",
-            title: "Employee Deleted!",
-            confirmButtonText: "OK",
-            onConfirm: () => {
-
-            },
-        }).then(() => {window. location. reload(false);})
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:8070/employee/delete/${id}`)
+                    .then(() => {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your data has been deleted.',
+                            'success'
+                        )
+                        setEmployees(employees.filter((i) => i._id !== id));
+                    })
+                    .catch((err) => {
+                        alert(err.message);
+                    });
+            }
+        })
+        // .then(() => { window.location.reload(false); })
             // .then((res) => {
             //     alert("Deleted Successfully!");
             //     this.getEmployees();
             //     () => navigate("employee/");
             // })
-            .catch ((error) => {
-            console.error("Error deleting employee:", error);
-        });
+            .catch((error) => {
+                console.error("Error deleting employee:", error);
+            });
     }
 
     // function generateReport() {
@@ -60,19 +76,29 @@ export default function AllEmployees() {
     function generateReport() {
         const doc = new jsPDF();
         doc.text("Employee Report", 10, 10);
-        const headers = [['Index','ID', 'Employee Name', 'Address', 'Mobile No', 'Email']];
-        const data = employees.map(({ name, _id, address, mobileNo, email}, index) => [index + 1,  _id, name, address, mobileNo, email]);
+        const headers = [['Index', 'ID', 'Employee Name', 'Address', 'Mobile No', 'Email']];
+        const data = employees.map(({ name, _id, address, mobileNo, email }, index) => [index + 1, _id, name, address, mobileNo, email]);
         doc.autoTable({ head: headers, body: data });
         doc.save('Employee_report.pdf');
     }
     function searchTable(employees) {
         return employees.filter((employee) => {
-            return (
-                employee.name.toLowerCase().includes(searchInput.toLowerCase())
-
-
-            );
-        });
+            for (const key in employee) {
+              if (
+                employee.hasOwnProperty(key) &&
+                typeof employee[key] === "string" &&
+                employee[key].toLowerCase().includes(searchInput.toLowerCase())
+              ) {
+                return true;
+              }
+            }
+            return false;
+          });
+        // return employees.filter((employee) => {
+        //     return (
+        //         employee.name.toLowerCase().includes(searchInput.toLowerCase())
+        //     );
+        // });
     }
 
     return (
@@ -80,7 +106,8 @@ export default function AllEmployees() {
 
             <div className="">
                 <br /><br />
-                <h1>Employee List</h1>
+                <center><h1>Employee Management Dashboard</h1></center>
+                <br />
                 <br />
                 <a className='btn btn-warning' href={`employee/add`}>
                     <i className=''></i>&nbsp;Add New Employee
@@ -104,11 +131,11 @@ export default function AllEmployees() {
                 />
             </div>
             <div>
-                <br/>
-                <br/>
+                <br />
+                <br />
             </div>
 
-            <table className="table table-striped"  style={{borderBottom:"1px solid #ddd"}}>
+            <table className="table table-striped" style={{ borderBottom: "1px solid #ddd" }}>
                 <thead className="thead-dark">
                     <tr>
                         <th scope="col">#</th>
@@ -117,44 +144,44 @@ export default function AllEmployees() {
                         <th scope="col">Address</th>
                         <th scope="col">Mobile No</th>
                         <th scope="col">NIC</th>
-                        <th scope="col">Birth </th>
+                        {/* <th scope="col">Birth </th> */}
                         <th scope="col">Email</th>
                         <th scope="col">Gender</th>
                         {/* <th scope="col">Leave Limit</th> */}
-                        <th scope="col">Password</th>
+                        {/* <th scope="col">Password</th> */}
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {searchTable(employees).map((employee, index) => (
-                        <tr style={{width:"90%"}} key={index}>
+                        <tr style={{ width: "90%" }} key={index}>
                             <th scope="row">{index + 1}</th>
                             <td>{employee.name}</td>
                             <td>{employee._id}</td>
                             <td>{employee.address}</td>
                             <td>{employee.mobileNo}</td>
                             <td>{employee.nic}</td>
-                            <td>{employee.dob}</td>
+                            {/* <td>{employee.dob}</td> */}
                             <td>{employee.email}</td>
                             <td>{employee.gender}</td>
                             {/* <td>{employee.leaveLimit}</td> */}
-                            <td>{employee.password}</td>
+                            {/* <td>{employee.password}</td> */}
 
-                            <td style={{display:'flex'}}> {/* <i class="fa-solid fa-calendar-days"></i> <i class="fa-solid fa-money-bill"></i>*/}
+                            <td style={{ display: 'flex' }}> {/* <i class="fa-solid fa-calendar-days"></i> <i class="fa-solid fa-money-bill"></i>*/}
                                 <a className='btn btn-warning' href={`employee/get/${employee._id}`}>
                                     <i title="Update Employee" className='fas fa-edit'></i>&nbsp;
                                 </a>&nbsp;
                                 <a className='btn btn-warning' href={`leave/add/get/${employee._id}`}>
-                                    <i  title="Edit the format" className='fas fa-calendar-days'></i>&nbsp;
+                                    <i title="Make a Leave" className='fas fa-calendar-days'></i>&nbsp;
                                 </a>&nbsp;
                                 <a className='btn btn-warning' href={`attendance/add/get/${employee._id}`}>
-                                <i  title="Edit the format" className='fas fa-check'></i>&nbsp;
+                                    <i title="Mark Attendance" className='fas fa-check'></i>&nbsp;
                                 </a>&nbsp;
                                 <a className='btn btn-warning' href={`payroll/add/get/${employee._id}`}>
-                                <i  title="Edit the format" className='fas fa-money-bill'></i>&nbsp;
+                                    <i title="Add Payroll" className='fas fa-money-bill'></i>&nbsp;
                                 </a>&nbsp;
                                 <a className='btn btn-danger' onClick={() => onDelete(`${employee._id}`)}>
-                                    <i  title="Edit the format" className='fas fa-trash-alt'></i>&nbsp;
+                                    <i title="Delete Employee" className='fas fa-trash-alt'></i>&nbsp;
                                 </a>
                             </td>
                         </tr>

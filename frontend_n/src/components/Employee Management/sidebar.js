@@ -9,7 +9,7 @@ function Sidebar() {
                     <div className='col-md-2'></div>
                     <div className='col-md-4'>
 
-                        <br /><img className='brandLogo' src={require('./images/logo.png')} /><br /><br /></div></div>
+                        <br /><img className='brandLogo' src={require('../images/logo.png')} /><br /><br /></div></div>
                 {/* <div className='container'>
                     <h4 >Employee Management Dashboard</h4>
                 </div> */}

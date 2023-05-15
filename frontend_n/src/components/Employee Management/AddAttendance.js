@@ -10,10 +10,10 @@ export default function AddAttendance() {
     const [name, setName] = useState("");
     const [status, setAttendance] = useState("");
     const [date, setDate] = useState("");
-    const [time_in, setTime_in] = useState("");
+    const [time_in, setTime_in] = useState("00:00");
     // const [time_in, setFinal] = useState(Date);
     const [final, setDateTime] = useState();
-    const [time_out, setTime_out] = useState("");
+    const [time_out, setTime_out] = useState("00:00");
     const [employeeId, setId] = useState("");
 
     useEffect(() => {
@@ -56,12 +56,12 @@ export default function AddAttendance() {
 
             },
         }).then(() => navigate("/attendance/"))
-        // .then(() => {
-        //     alert("Attendance Added!");
-        // })
-        .catch((error) => {
-            alert(error)
-        })
+            // .then(() => {
+            //     alert("Attendance Added!");
+            // })
+            .catch((error) => {
+                alert(error)
+            })
 
 
     }
@@ -84,7 +84,7 @@ export default function AddAttendance() {
         <div className="dashboard-app container">
 
             <form onSubmit={sendData}>
-            <h1>Add Attendance</h1>
+                <h1>Add Attendance</h1>
                 <div className="form-group">
                     <label for="employeeId">ID</label>
                     <input className="form-control" id="employeeId" placeholder="Enter employee Id" value={employeeId} onChange={(e) => {
@@ -98,10 +98,15 @@ export default function AddAttendance() {
                     }} />
                 </div>
                 <div className="form-group">
-                    <label for="status">Status</label>
-                    <input type="text" className="form-control" id="status" placeholder="Enter status" onChange={(e) => {
+                    <label for="status">Status</label>&nbsp;
+                    <select id="status" name="status" onChange={(e) => {
                         setAttendance(e.target.value);
-                    }} />
+                    }} >
+                        <option value="Not Selected" >Choose one...</option>
+                        <option value="Present" >Present</option>
+                        <option value="Absent">Absent</option>
+                        <option value="Half-day">Half-day</option>
+                    </select>
                 </div>
                 {/* <div className="form-group">
                     <label for="time_in">Time In</label>
@@ -115,18 +120,39 @@ export default function AddAttendance() {
                         setDate(e.target.value);
                     }} />
                 </div>
-                <div className="form-group">
-                    <label for="time_in">Time In</label>
-                    <input type="time" className="form-control without_ampm" id="time_in" placeholder="Enter time" onChange={(e) => {
-                        setTime_in(e.target.value);
-                    }} />
+                {status === 'Absent' ? (
+                    <div>
+                    <div className="form-group">
+                        <label for="time_in">Time In</label>
+                        <input type="time" className="form-control without_ampm" id="time_in" placeholder="Enter time" disabled value={"00:00"} onChange={(e) => {
+                            setTime_in(e.target.value);
+                        }} />
+                    </div>
+                    <div className="form-group">
+                        <label for="time_out">Time Out</label>
+                        <input type="time" className="form-control" id="time_out" placeholder="Enter time" disabled value={"00:00"} onChange={(e) => {
+                            setTime_out(e.target.value);
+                        }} />
+                    </div>
                 </div>
-                <div className="form-group">
-                    <label for="time_out">Time Out</label>
-                    <input type="time" className="form-control" id="time_out" placeholder="Enter time" onChange={(e) => {
-                        setTime_out(e.target.value);
-                    }} />
-                </div>
+                ) : (
+                    <div>
+                        <div className="form-group">
+                            <label for="time_in">Time In</label>
+                            <input type="time" className="form-control without_ampm" id="time_in" placeholder="Enter time" onChange={(e) => {
+                                setTime_in(e.target.value);
+                            }} />
+                        </div>
+                        <div className="form-group">
+                            <label for="time_out">Time Out</label>
+                            <input type="time" className="form-control" id="time_out" placeholder="Enter time" onChange={(e) => {
+                                setTime_out(e.target.value);
+                            }} />
+                        </div>
+                    </div>
+
+                )}
+
                 {/* <div>
                     <label htmlFor="time_in">Select a date and time:</label>
                     <input

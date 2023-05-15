@@ -62,7 +62,7 @@ export default function AddLeave() {
 
     return (
         <div className="dashboard-app container">
-            <h1>Add Leave</h1>
+            <h1>Make a Leave</h1>
             <form onSubmit={sendData}>
                 <div className="form-group">
                     <label for="employeeId">ID</label>

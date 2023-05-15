@@ -66,6 +66,8 @@ export default function EditAttendance() {
 
     return (
         <div className="dashboard-app container">
+            <h1>Update Attendance</h1>
+                <br />
             <form onSubmit={updateData}>
                 <div className="form-group">
                     <label for="name">Name</label>

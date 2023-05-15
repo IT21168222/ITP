@@ -3,10 +3,11 @@ import React, { useState} from 'react';
 
 function Header() {
 
-    const [employeeId, setId] = useState("644e1f91a1d71168d66cb67a");
+    const [employeeId, setId] = useState("");
 
     return (
         <div className="dashboard-app container">
+            <h2>To see the employee profile(Tempory Page)</h2>
             <form>
             <div className="form-group">
                     <label for="employeeId">ID</label>

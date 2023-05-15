@@ -5,15 +5,17 @@ const Schema = mongoose.Schema;
 const attendanceSchema = new Schema({
     employeeId: {
         type: String,
-        required: true
+        required: true,
+        unique : true,
     },
     name : {
         type : String,
-        required : true
+        required : false
     },
     status : {
         type : String,
-        required : true
+        required : false,
+        enum: ['Present', 'Absent', 'Late', 'Half-day']
     },
     date : {
         type : String,

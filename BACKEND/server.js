@@ -5,6 +5,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const app = express();
 require("dotenv").config();
+const Attendance = require("./models/attendance");
 
 const PORT = process.env.PORT || 8070;
 
@@ -15,17 +16,33 @@ const URL = process.env.MONGODB_URL;
 
 //const uri = "mongodb+srv://it21168222:my_db@cluster0.q2qsjs4.mongodb.net/my_db?retryWrites=true&w=majority"
 
-async function connect(){
-    try{
+async function connect() {
+    try {
         await mongoose.connect(URL);
         console.log("Connected to MongoDB");
-    }catch(error){
+    } catch (error) {
         console.error(error);
     }
 
 }
 
 connect();
+
+
+// Define a function to set initial attendance status as "Absent"
+async function setInitialAttendance() {
+    try {
+        //   await Attendance.updateMany({}, { $set: { status: 'Absent' } });
+        await Attendance.updateMany({}, { $set: { status: 'Absent' } }, { timeout: false });
+        console.log('Initial attendance status set to "Absent"');
+    } catch (error) {
+        console.error(error);
+    } finally {
+        await mongoose.disconnect();
+        connect();
+    }
+}
+// setInitialAttendance();
 
 // 
 // mongoose.connect(URL, {
@@ -58,6 +75,7 @@ const leaveRouter = require("./routes/leaves.js");
 app.use("/leave", leaveRouter);
 
 const viewRouter = require("./routes/views.js");
+// const Attendance = require("./models/attendance.js");
 app.use("/view", viewRouter);
 
 // const testRouter = require("./routes/tests.js");

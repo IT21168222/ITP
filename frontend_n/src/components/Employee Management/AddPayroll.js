@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 
 export default function AddPayroll() {
@@ -13,6 +14,8 @@ export default function AddPayroll() {
     const [bonus, setBonus] = useState("");
     const [tax, setTax] = useState("");
     const [employeeId, setId] = useState("");
+    const [payrolls, setPayrolls] = useState([]);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -29,6 +32,17 @@ export default function AddPayroll() {
             }
 
             getPayroll();
+
+            // function getPayrolls() {
+            //     axios.get("http://localhost:8070/payroll/").then((res) => {
+            //         setPayrolls(res.data);
+            //     }).catch((error) => {
+            //         alert(error.message);
+
+            //     })
+            // }
+
+            // getPayrolls();
         }
 
 
@@ -48,11 +62,17 @@ export default function AddPayroll() {
 
         }
         //alert("Hi" + name)
-        axios.post("http://localhost:8070/payroll/add", newPayroll).then(() => {
-            alert("Payroll Added!");
-        }).catch((error) => {
-            alert(error)
-        })
+        axios.post("http://localhost:8070/payroll/add", newPayroll)
+            .then(() => {
+                Swal.fire({
+                    icon: "success",
+                    title: "Payroll Added!",
+                    confirmButtonText: "OK",
+                })
+            }).then(() => navigate("/payroll/"))
+            .catch((error) => {
+                alert(error)
+            })
 
     }
 

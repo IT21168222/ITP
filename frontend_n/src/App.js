@@ -3,33 +3,33 @@ import './components/css/header.css';
 import './components/css/sidebar.css';
 import './App.css';
 
-import Header from './components/headerEmployee';
-import Sidebar from './components/sidebar';
+import Header from './components/Employee Management/headerEmployee';
+import Sidebar from './components/Employee Management/sidebar';
 
-import AddEmployee from './components/AddEmployee';
-import AllEmployees from './components/AllEmployees';
-import Test from './components/test';
-import UpdateEmployee from './components/UpdateEmployee';
+import AddEmployee from './components/Employee Management/AddEmployee';
+import AllEmployees from './components/Employee Management/AllEmployees';
+import Test from './components/Employee Management/test';
+import UpdateEmployee from './components/Employee Management/UpdateEmployee';
 
-import AddPayroll from './components/AddPayroll';
-import AllPayrolls from './components/AllPayrolls';
-import UpdatePayroll from './components/UpdatePayroll';
+import AddPayroll from './components/Employee Management/AddPayroll';
+import AllPayrolls from './components/Employee Management/AllPayrolls';
+import UpdatePayroll from './components/Employee Management/UpdatePayroll';
 
-import Leave_stat from './components/leave_stat';
+import Leave_stat from './components/Employee Management/leave_stat';
 
-import AddLeave from './components/AddLeave';
-import UpdateLeave from './components/UpdateLeave';
+import AddLeave from './components/Employee Management/AddLeave';
+import UpdateLeave from './components/Employee Management/UpdateLeave';
 
-import ViewEmployee from './components/Dashboard';
-import ViewEmployeeLink from './components/employee_page';
+import ViewEmployee from './components/Employee Management/Dashboard';
+import ViewEmployeeLink from './components/Employee Management/employee_page';
 
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import AddAttendance from './components/AddAttendance';
-import AllAttendances from './components/AllAttendance';
-import UpdateAttendance from './components/UpdateAttendance';
-import My from './components/My';
-import AllLeaves from './components/AllLeave';
+import AddAttendance from './components/Employee Management/AddAttendance';
+import AllAttendances from './components/Employee Management/AllAttendance';
+import UpdateAttendance from './components/Employee Management/UpdateAttendance';
+import My from './components/Employee Management/Attendance';
+import AllLeaves from './components/Employee Management/AllLeave';
 
 export default class App extends Component {
 
@@ -78,7 +78,7 @@ export default class App extends Component {
             <Route path="employee/view/" exact Component={ViewEmployeeLink} ></Route>
 
             {/* <My/> */}
-            <Route path="qr/" exact Component={My} ></Route>
+            <Route path="attendance/qr/" exact Component={My} ></Route>
             <Route path="testM/" exact Component={Test} ></Route>
             {/* <Route path="test/" exact Component={Test_Page} ></Route> */}
 

@@ -76,5 +76,30 @@ a:link { text-decoration: none; }
 
 
 .form-control{
-  width:fit-content
+  width:70%
+  /* fit-content */
+}
+
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+#video{
+  width: 50% !important;
+  height: auto !important;
+  position: relative !important;
+}
+
+.dashboard-app.container div:last-child {
+  /* your CSS rules here */
+  width: 'none' !important; padding-top: 0 !important ; overflow: hidden !important; position:'none'  !important;
 }

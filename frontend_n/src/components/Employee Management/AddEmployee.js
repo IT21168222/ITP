@@ -96,7 +96,7 @@ export default function AddEmployee() {
                     </div>
                     <div className="form-group">
                         <label for="nic">NIC</label>
-                        <input type="numeric" className="form-control" id="nic" placeholder="Enter NIC" pattern="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]" onChange={(e) => {
+                        <input type="number" className="form-control" id="nic" placeholder="Enter NIC" pattern="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]" onChange={(e) => {
                             setNIC(e.target.value);
                         }} />
                     </div>
@@ -132,7 +132,7 @@ export default function AddEmployee() {
 
                     <div className="form-group">
                         <label for="leaveLimit">Leave Limit</label>
-                        <input type="Number" className="form-control" id="leaveLimit" placeholder="Enter Leave Limit" onChange={(e) => {
+                        <input type="Number" className="form-control" min="0" max="10" id="leaveLimit" placeholder="Enter Leave Limit" onChange={(e) => {
                             setLeaveLimit(e.target.value);
                         }} />
                     </div>

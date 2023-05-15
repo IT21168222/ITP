@@ -27,14 +27,14 @@ export default function AllLeaves() {
 
     function onDelete(id) {
         axios.delete(`http://localhost:8070/leave/delete/${id}`)
-            Swal.fire({
-                icon: "info",
-                title: "Deleted Successfully!",
-                confirmButtonText: "OK",
-                onConfirm: () => {
+        Swal.fire({
+            icon: "info",
+            title: "Deleted Successfully!",
+            confirmButtonText: "OK",
+            onConfirm: () => {
 
-                },
-            }).then(refreshPage)
+            },
+        }).then(refreshPage)
             // .then((res) => {
             //     alert("Deleted Successfully!");
             //     this.getLeaves();
@@ -44,7 +44,7 @@ export default function AllLeaves() {
             });
     }
 
-    function refreshPage() { window. location. reload(false); }
+    function refreshPage() { window.location.reload(false); }
 
 
     function onUpdate(id) {
@@ -81,12 +81,16 @@ export default function AllLeaves() {
             alert(error)
         })
     }
-    function refreshPage() { window. location. reload(false); }
+    function refreshPage() { window.location.reload(false); }
 
     return (
         <div className="dashboard-app container">
             <h1>Leave Requests</h1>
-            <table className="table">
+            <div>
+                <br />
+                <br />
+            </div>
+            <table className="table table-striped" style={{ borderBottom: "1px solid #ddd" }}>
                 <thead className="thead-dark">
                     <tr>
                         <th scope="col">#</th>
@@ -95,6 +99,7 @@ export default function AllLeaves() {
                         <th scope="col">Type</th>
                         <th scope="col">Remarks</th>
                         <th scope="col">Status</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,20 +113,27 @@ export default function AllLeaves() {
                             {/* <td>{leave.status}</td> */}
                             <td className={`${leave.status === 'Rejected' ? 'text-danger' : leave.status === 'Approved' ? 'text-success' : ''}`}><b>{leave.status}</b></td>
 
-                            <td>
-                                <button className="btn btn-primary" onClick={() => onUpdate(`${leave._id}`)}>
-                                <i className='fas fa-check' style={{color: "#02f212",}}></i>&nbsp;Approve
-                                </button>&nbsp;
-                                <button className='btn btn-danger' onClick={() => onUpdate1(`${leave._id}`)}>
-                                    <i className="fas fa-xmark" style={{color: "#ffffff",}} />&nbsp;Reject
-                                </button>
-                            </td>
+                            {leave.status === 'Approved' || leave.status === 'Rejected' ? (
+                                <td>Action taken</td>
+                            ) : (
+                                <td>
+                                    <button className="btn btn-primary" onClick={() => onUpdate(`${leave._id}`)}>
+                                        <i className='fas fa-check' style={{ color: "#02f212", }}></i>&nbsp;Approve
+                                    </button>&nbsp;
+                                    <button className='btn btn-danger' onClick={() => onUpdate1(`${leave._id}`)}>
+                                        <i className="fas fa-xmark" style={{ color: "#ffffff", }} />&nbsp;Reject
+                                    </button>
+                                </td>
+                            )}
+
                         </tr>
                     ))}
 
                 </tbody>
 
             </table>
+
+
 
             <a className='btn btn-warning' href={`/leave/add`}>
                 <i className=''></i>&nbsp;Add Leave Manually
