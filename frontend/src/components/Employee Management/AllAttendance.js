@@ -11,6 +11,8 @@ export default function AllAttendances() {
     const [attendances, setAttendances] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [searchInput, setSearchInput] = useState("");
+    const [currentTime, setCurrentTime] = useState("");
+    const [currentDate, setcurrentDate] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,44 +25,44 @@ export default function AllAttendances() {
             })
         }
 
-       getAttendances();
+        getAttendances();
+
+
+        const dateString = Date();
+        const dateObject = new Date(dateString);
+        const year = dateObject.getFullYear();
+        const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObject.getDate()).padStart(2, '0');
+        setcurrentDate(`${year}-${month}-${day}`)
+
+        setSearchInput(`${year}-${month}-${day}`);
 
     }, [])
-    // 
 
 
-    function initialAttendance() {
-        // if (true) {//attendances === []
-            // Fetch the employees from your backend API
-            axios.get("http://localhost:8070/employee/").then((res) => {
-                setEmployees(res.data);
-                // Initialize the attendance as absent for each employee
-                const initialAttendanceList = employees.map((employee) => ({
-                    employeeId: employee._id,
-                    status: "Absent",
-                }));
+    const fetchData = async () => {
+        try {
+            const employeesResponse = await axios.get("http://localhost:8070/employee/");
+            setEmployees(employeesResponse.data);
 
-                // Save the initial attendance to the database using your backend API
-                axios
-                    .post("http://localhost:8070/attendance/add", initialAttendanceList)
-                    .then((response) => {
-                        alert("Initialized Successfully");
-                        axios.get("http://localhost:8070/attendance/").then((res) => {
-                            setAttendances(res.data);
-                            refreshPage();
-                        }).catch((error) => {
-                            alert(error.message);
-            
-                        }) // Move this inside the `then` block
-                        
-                    });
-            });
+            const initialAttendanceList = employeesResponse.data.map((employee) => ({
+                employeeId: employee._id,
+                name: employee.name,
+                date: currentDate,
+                time_in: "-",
+                time_out: "-",
+                status: "Absent",
+            }));
 
-        // } else {
-        //     //
+            const initialAttendanceResponse = await axios.post("http://localhost:8070/attendance/all", initialAttendanceList);
+            alert("Initialized Successfully");
 
-        // }
-    }
+            const attendanceResponse = await axios.get("http://localhost:8070/attendance/");
+            setAttendances(attendanceResponse.data);
+        } catch (error) {
+            alert(error.message);
+        }
+    };
 
     function onDelete(id) {
         Swal.fire({
@@ -98,11 +100,18 @@ export default function AllAttendances() {
 
     function refreshPage() { window.location.reload(false); }
 
+    function reset() {
+        setSearchInput("")
+    }
+    function today() {
+        setSearchInput(currentDate)
+    }
+
 
     function searchTable(attendances) {
         return attendances.filter((attendance) => {
             return (
-                attendance.name.toLowerCase().includes(searchInput.toLowerCase())
+                attendance.date.toLowerCase().includes(searchInput.toLowerCase())
 
 
             );
@@ -113,19 +122,30 @@ export default function AllAttendances() {
     return (
         <div className="dashboard-app container">
             <h1>Attendance List</h1>
-            <div
+            <h2>Clock In</h2>
+            <div className="searchbar">
+                <div class="row row-cols-lg-auto g-3 align-items-center">
+                    <div class="row mb-3 align-items-center">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">&nbsp;&nbsp;&nbsp;&nbsp;Date</label>
+                        <div class="col-sm-10">
+                            <input
+                                style={{ width: '100%', margin: '20px 0' }}
 
-                className="searchbar">
-                <input
-                    style={{ width: '30%', margin: '20px 0' }}
+                                type="text"
+                                className="form-control"
+                                id="inlineFormInputGroup"
+                                placeholder="Search by Date..."
+                                value={searchInput}
+                                onChange={(e) => setSearchInput(e.target.value)}
+                            />
+                        </div>
+                    </div>
 
-                    type="text"
-                    className="form-control"
-                    id="inlineFormInputGroup"
-                    placeholder="Search for Attendance by Name..."
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                />
+
+                    <div class="col align-items-center"></div>
+                    <div class="col align-items-center" style={{ textAlign: 'right' }}><button onClick={today} className="btn btn-primary">Today</button>&nbsp;<button onClick={reset} className="btn btn-primary">Show All</button></div>
+                </div>
+
             </div>
             <table className="table table-striped" style={{ borderBottom: "1px solid #ddd" }}>
                 <thead className="thead-dark">
@@ -134,25 +154,27 @@ export default function AllAttendances() {
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Date</th>
                         <th scope="col">Time In</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {(attendances).map((attendance, index) => (
+                    {searchTable(attendances).map((attendance, index) => (
                         <tr>
                             <th scope="row">{index + 1}</th>
                             <td>{attendance.employeeId}</td>
                             <td>{attendance.name}</td>
                             <td>{attendance.status}</td>
+                            <td>{attendance.date}</td>
                             <td>{attendance.time_in}</td>
 
                             <td>
                                 <a className='btn btn-warning' href={`get/${attendance._id}`}>
-                                    <i className='fas fa-edit'></i>&nbsp;Edit
+                                    <i className='fas fa-edit'></i>&nbsp;
                                 </a>&nbsp;
                                 <a className='btn btn-danger' onClick={() => onDelete(`${attendance._id}`)}>
-                                    <i className='fas fa-trash-alt'></i>&nbsp;Delete
+                                    <i className='fas fa-trash-alt'></i>&nbsp;
                                 </a>
                             </td>
                         </tr>
@@ -161,6 +183,8 @@ export default function AllAttendances() {
                 </tbody>
 
             </table>
+
+            <h2>Clock Out</h2>
             <table className="table table-striped" style={{ borderBottom: "1px solid #ddd" }}>
                 <thead className="thead-dark">
                     <tr>
@@ -168,26 +192,28 @@ export default function AllAttendances() {
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Date</th>
                         <th scope="col">Time Out</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {(attendances).map((attendance, index) => (
+                    {searchTable(attendances).map((attendance, index) => (
                         <tr>
                             <th scope="row">{index + 1}</th>
                             <td>{attendance.employeeId}</td>
                             <td>{attendance.name}</td>
                             <td>{attendance.status}</td>
+                            <td>{attendance.date}</td>
                             <td>{attendance.time_out}</td>
 
                             <td>
                                 <a className='btn btn-warning' href={`get/${attendance._id}`}>
-                                    <i className='fas fa-edit'></i>&nbsp;Edit
+                                    <i className='fas fa-edit'></i>&nbsp;
                                 </a>&nbsp;
-                                <a className='btn btn-danger' onClick={() => onDelete(`${attendance._id}`)}>
+                                {/* <a className='btn btn-danger' onClick={() => onDelete(`${attendance._id}`)}>
                                     <i className='fas fa-trash-alt'></i>&nbsp;Delete
-                                </a>
+                                </a> */}
                             </td>
                         </tr>
                     ))}
@@ -208,7 +234,7 @@ export default function AllAttendances() {
             <a className='btn btn-warning' href={`/attendance/add`}>
                 <i className=''></i>&nbsp;Add New Attendance Manually
             </a>
-            <button onClick={initialAttendance}>Initialize</button>
+            <button onClick={fetchData}>Initialize</button>
         </div>
 
     )

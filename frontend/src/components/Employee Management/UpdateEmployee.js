@@ -69,14 +69,17 @@ export default function EditEmployee() {
             password
         }
         axios.put(`http://localhost:8070/employee/update/${params.id}`, newEmployee)
-        Swal.fire({
-            icon: "success",
-            title: "Employee Updated!",
-            confirmButtonText: "OK",
-            onConfirm: () => {
-
-            },
-        }).then(() => navigate("/"))
+        .then(() => {
+            Swal.fire({
+                icon: "success",
+                title: "Employee Updated!",
+                confirmButtonText: "OK",
+                onConfirm: () => {
+    
+                },
+            })
+        })
+        .then(() => navigate("/"))
             // .then(() => {
             //     alert("Employee Updated!");
             // })

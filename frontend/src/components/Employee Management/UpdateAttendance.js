@@ -45,13 +45,16 @@ export default function EditAttendance() {
             time_out
         }
         axios.put(`http://localhost:8070/attendance/update/${params.id}`, newAttendance)
-        Swal.fire({
-            icon: "success",
-            title: "Attendance Updated!",
-            confirmButtonText: "OK",
-            onConfirm: () => {
-
-            },
+        .then(() => {
+            Swal.fire({
+                icon: "success",
+                title: "Attendance Updated!",
+                confirmButtonText: "OK",
+                onConfirm: () => {
+    
+                },
+            
+            })
         }).then(() => navigate("/attendance/"))
             // .then(() => {
             //     alert("Attendance Updated!");

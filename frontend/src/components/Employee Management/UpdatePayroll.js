@@ -50,14 +50,17 @@ export default function EditPayroll() {
             tax
         }
         axios.put(`http://localhost:8070/payroll/update/${params.id}`, newPayroll)
-        Swal.fire({
-            icon: "success",
-            title: "Payroll Updated!",
-            confirmButtonText: "OK",
-            onConfirm: () => {
-
-            },
-        }).catch((error) => {
+        .then(() => {
+            Swal.fire({
+                icon: "success",
+                title: "Payroll Updated!",
+                confirmButtonText: "OK",
+                onConfirm: () => {
+    
+                },
+            })
+        })
+        .catch((error) => {
             alert(error)
         })
 

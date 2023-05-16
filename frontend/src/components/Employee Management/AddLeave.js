@@ -43,17 +43,17 @@ export default function AddLeave() {
         }
         //alert("Hi" + employeeId)
         axios.post("http://localhost:8070/leave/add", newLeave)
-        Swal.fire({
-            icon: "success",
-            title: "leave Added!",
-            confirmButtonText: "OK",
-            onConfirm: () => {
-
-            },
+        .then(() => {
+            Swal.fire({
+                icon: "success",
+                title: "leave Added!",
+                confirmButtonText: "OK",
+                onConfirm: () => {
+    
+                },
+            })
         }).then(() => navigate("/leave/"))
-        // .then(() => {
-        //     alert("Leave Added!");
-        // })
+
         .catch((error) => {
             alert(error)
         })

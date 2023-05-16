@@ -17,7 +17,7 @@ export default function AddAttendance() {
     const [employeeId, setId] = useState("");
 
     useEffect(() => {
-        
+
         if (params.id) {
             function getAttendance() {
                 axios.get(`http://localhost:8070/attendance/add/get/${params.id}`).then((res) => {
@@ -49,19 +49,23 @@ export default function AddAttendance() {
         // (time_in)alert
         //alert("Hi" + name)
         axios.post("http://localhost:8070/attendance/add", newAttendance)
-        Swal.fire({
-            icon: "success",
-            title: "Attendance Added!",
-            confirmButtonText: "OK",
-            onConfirm: () => {
+            .then(() => {
+                Swal.fire({
+                    icon: "success",
+                    title: "Attendance Added!",
+                    confirmButtonText: "OK",
+                    onConfirm: () => {
 
-            },
-        }).then(() => navigate("/attendance/"))
-            // .then(() => {
-            //     alert("Attendance Added!");
-            // })
+                    },
+                }).then(() => navigate("/attendance/"))
+            })
             .catch((error) => {
-                alert(error)
+                if (error.code === 11000) {
+                    alert("User is already exist!")
+                    
+                  } else {
+                    alert("Failed to add attendance")
+                  }
             })
 
 
@@ -123,19 +127,19 @@ export default function AddAttendance() {
                 </div>
                 {status === 'Absent' ? (
                     <div>
-                    <div className="form-group">
-                        <label for="time_in">Time In</label>
-                        <input type="time" className="form-control without_ampm" id="time_in" placeholder="Enter time" disabled value={"00:00"} onChange={(e) => {
-                            setTime_in(e.target.value);
-                        }} />
+                        <div className="form-group">
+                            <label for="time_in">Time In</label>
+                            <input type="time" className="form-control without_ampm" id="time_in" placeholder="Enter time" disabled value={"00:00"} onChange={(e) => {
+                                setTime_in(e.target.value);
+                            }} />
+                        </div>
+                        <div className="form-group">
+                            <label for="time_out">Time Out</label>
+                            <input type="time" className="form-control" id="time_out" placeholder="Enter time" disabled value={"00:00"} onChange={(e) => {
+                                setTime_out(e.target.value);
+                            }} />
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label for="time_out">Time Out</label>
-                        <input type="time" className="form-control" id="time_out" placeholder="Enter time" disabled value={"00:00"} onChange={(e) => {
-                            setTime_out(e.target.value);
-                        }} />
-                    </div>
-                </div>
                 ) : (
                     <div>
                         <div className="form-group">

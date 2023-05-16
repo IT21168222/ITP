@@ -43,17 +43,16 @@ export default function EditLeave() {
             remarks
         }
         axios.put(`http://localhost:8070/leave/update/${params.id}`, newLeave)
-        Swal.fire({
-            icon: "success",
-            title: "Leave Updated!",
-            confirmButtonText: "OK",
-            onConfirm: () => {
+            .then(() => {
+                Swal.fire({
+                    icon: "success",
+                    title: "Leave Updated!",
+                    confirmButtonText: "OK",
+                    onConfirm: () => {
 
-            },
-        })
-            // .then(() => {
-            //     alert("Leave Updated!");
-            // })
+                    },
+                })
+            })
             .catch((error) => {
                 alert(error)
             })

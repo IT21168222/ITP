@@ -34,7 +34,7 @@ const cron = require('node-cron');
 // cron.schedule('0 0 * * *', executeOncePerDay);
 
 
-router.route("/add").post((req, res) => {
+router.route("/all").post((req, res) => {
     const attendanceData = req.body;
   
     const newAttendance = attendanceData.map((data) => {
@@ -61,32 +61,32 @@ router.route("/add").post((req, res) => {
   });
   
 
-// router.route("/add").post((req, res) => {
-//     const name = req.body.name;
-//     const employeeId = req.body.employeeId;
-//     const status = req.body.status;
-//     const date = req.body.date;
-//     const time_in = req.body.time_in;
-//     const time_out = req.body.time_out;
+router.route("/add").post((req, res) => {
+    const name = req.body.name;
+    const employeeId = req.body.employeeId;
+    const status = req.body.status;
+    const date = req.body.date;
+    const time_in = req.body.time_in;
+    const time_out = req.body.time_out;
 
-//     const newAttendance = new Attendance({
-//         name,
-//         employeeId,
-//         status,
-//         date,
-//         time_in,
-//         time_out
+    const newAttendance = new Attendance({
+        name,
+        employeeId,
+        status,
+        date,
+        time_in,
+        time_out
 
-//     })
+    })
 
-//     newAttendance.save().then(() => {
-//         res.json("Attendance Added!")
-//     }).catch((err) => {
-//         console.log(err);
-//     })
+    newAttendance.save().then(() => {
+        res.json("Attendance Added!")
+    }).catch((err) => {
+        console.log(err);
+    })
 
 
-// })
+})
 
 router.route("/").get((req, res) => {
     Attendance.find().then((attendances) => {
@@ -123,15 +123,35 @@ router.route("/update/:id").put(async (req, res) => {
 
 
 //QR update part
-router.route("/updateAttendance/:id").put(async (req, res) => {
+router.route("/updateAttendance/out/:id").put(async (req, res) => {
     let userId = req.params.id;
     const { time_out } = req.body; // names in front end
     const updateAttendance = {
         employeeId: userId,
-        time_out
+        time_out,
     }
     // db.users.findOneAndUpdate({ email: "example@email.com" }, { $set: { age: 30 } }, { returnOriginal: false } )
     const update = await Attendance.findOneAndUpdate({ employeeId: userId }, { $set: { time_out: time_out } }, { returnOriginal: false }).then(() => {
+        res.status(200).send({ status: "updated" });//for success
+    }).catch((err) => {
+        res.status(500).send({ status: "Error with updating details !!!" });
+    })
+
+
+
+})
+
+
+//QR update part
+router.route("/updateAttendance/in/:id").put(async (req, res) => {
+    let userId = req.params.id;
+    const { time_in } = req.body; // names in front end
+    const updateAttendance = {
+        employeeId: userId,
+        time_in,
+    }
+    // db.users.findOneAndUpdate({ email: "example@email.com" }, { $set: { age: 30 } }, { returnOriginal: false } )
+    const update = await Attendance.findOneAndUpdate({ employeeId: userId },{ $set: { time_in: time_in } }, { returnOriginal: false }).then(() => {
         res.status(200).send({ status: "updated" });//for success
     }).catch((err) => {
         res.status(500).send({ status: "Error with updating details !!!" });

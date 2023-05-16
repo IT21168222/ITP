@@ -16,10 +16,34 @@ class Attendance extends Component {
       time_in: "",
       time_out: "",
       time_type: "",
+      currentTime: "",
+      currentDate: "",
+
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
+  }
+
+  componentDidMount() {
+    this.getFormattedDateTime();
+  }
+
+  getFormattedDateTime() {
+    const dateString = new Date();
+    const dateObject = new Date(dateString);
+    const year = dateObject.getFullYear();
+    const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObject.getDate()).padStart(2, '0');
+    const hours = String(dateObject.getHours()).padStart(2, '0');
+    const minutes = String(dateObject.getMinutes()).padStart(2, '0');
+    //const seconds = dateObject.getSeconds();
+
+    this.state.currentDate = `${year}-${month}-${day}`;
+    this.state.currentTime = `${hours}:${minutes}`;
+    console.log(this.state.currentTime)
+    console.log(this.state.currentDate);
+    //console.log(formattedTime);
   }
 
 
@@ -64,35 +88,53 @@ class Attendance extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     if (this.state.time_type === "Time In") {
-      const newAttendance = {
-        //name: this.state.name,
-        employeeId: this.state.qrData,
-        status: "Present",
-        time_in: Date(),
-        time_out: "-", //"-"
+      // const newAttendance = {
+      //   //name: this.state.name,
+      //   employeeId: this.state.qrData,
+      //   status: "Present",
+      //   date: this.state.currentDate,
+      //   time_in: this.state.currentTime,
+      //   time_out: "-", //"-"
 
-      };
-      axios
-        .post("http://localhost:8070/attendance/add", newAttendance)
-        .then(() => {
-          Swal.fire({
-            icon: "success",
-            title: "Marked Successfully!",
-            confirmButtonText: "OK",
-            onConfirm: () => {
+      // };
+      // axios
+      //   .post("http://localhost:8070/attendance/add", newAttendance)
+      //   .then(() => {
+      //     Swal.fire({
+      //       icon: "success",
+      //       title: "Marked Successfully!",
+      //       confirmButtonText: "OK",
+      //       onConfirm: () => {
   
-            },
-          }).then()
-        })
-        .catch((error) => {
-          alert(error);
-        });
+      //       },
+      //     }).then()
+      //   })
+      //   .catch((error) => {
+      //     alert(error);
+      //   });
+      const newQrin = {
+        date: this.state.currentDate,
+        time_in: this.state.currentTime,
+      }
+      axios.put(`http://localhost:8070/attendance/updateAttendance/in/${this.state.qrData}`, newQrin).then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Marked Successfully!",
+          confirmButtonText: "OK",
+          onConfirm: () => {
+
+          },
+        }).then()
+      }).catch((error) => {
+        alert(error)
+      });
     } else if (this.state.time_type === "Time Out") {
       // alert("Time Out if");
-      const newQr = {
-        time_out: Date(),
+      const newQrout = {
+        date: this.state.currentDate,
+        time_out: this.state.currentTime,
       }
-      axios.put(`http://localhost:8070/attendance/updateAttendance/${this.state.qrData}`, newQr).then(() => {
+      axios.put(`http://localhost:8070/attendance/updateAttendance/out/${this.state.qrData}`, newQrout).then(() => {
         Swal.fire({
           icon: "success",
           title: "Marked Successfully!",
@@ -135,6 +177,8 @@ class Attendance extends Component {
       [name]: value
     })
   }
+
+  
 
   render() {
     const { qrData } = this.state;
